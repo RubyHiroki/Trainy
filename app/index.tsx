@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -18,13 +18,6 @@ export default function LoginScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ThemedView style={styles.container} lightColor="#FFFFFF" darkColor="#FFFFFF">
-        {/* Status Bar */}
-        <View style={styles.statusBar}>
-          <ThemedText style={styles.statusBarText} lightColor="#2D2D2D" darkColor="#2D2D2D">
-            9:41
-          </ThemedText>
-        </View>
-
         {/* Main Content */}
         <View style={styles.content}>
           {/* Title Section */}
@@ -77,7 +70,6 @@ export default function LoginScreen() {
                   新規登録はこちら
                 </ThemedText>
               </TouchableOpacity>
-              <View style={styles.linkDivider} />
               <TouchableOpacity>
                 <ThemedText style={styles.linkText} lightColor="#A1A1A1" darkColor="#A1A1A1">
                   パスワードをお忘れの方
@@ -110,13 +102,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 12,
     elevation: 25,
-  },
-  statusBar: {
-    paddingTop: Platform.OS === 'ios' ? 16 : (StatusBar.currentHeight || 0) + 16,
-    paddingHorizontal: 32,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
   statusBarText: {
     fontSize: 14,
@@ -197,6 +182,7 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Noto Sans JP' : 'sans-serif',
   },
   linksSection: {
+    marginTop: 24,
     paddingBottom: 64,
     alignItems: 'center',
   },
