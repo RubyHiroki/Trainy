@@ -65,7 +65,7 @@ export default function LoginScreen() {
           {/* Links Section */}
           <View style={styles.linksSection}>
             <View style={styles.linksContainer}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push('register' as any)}>
                 <ThemedText style={styles.linkText} lightColor="#A1A1A1" darkColor="#A1A1A1">
                   新規登録はこちら
                 </ThemedText>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Noto Sans JP' : 'sans-serif',
   },
   linksSection: {
-    marginTop: 24,
+    marginTop: 70,
     paddingBottom: 64,
     alignItems: 'center',
   },
