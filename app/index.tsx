@@ -70,7 +70,7 @@ export default function LoginScreen() {
                   新規登録はこちら
                 </ThemedText>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push('forgot-password' as any)}>
                 <ThemedText style={styles.linkText} lightColor="#A1A1A1" darkColor="#A1A1A1">
                   パスワードをお忘れの方
                 </ThemedText>

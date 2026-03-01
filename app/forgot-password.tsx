@@ -8,53 +8,40 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { TrainyTitle } from '@/components/trainy-title';
 
-export default function RegisterScreen() {
-  const [username, setUsername] = useState('');
+export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
 
-  const handleRegister = () => {
-    console.log('Register:', { username, email, password, confirmPassword });
+  const handleSend = () => {
+    console.log('Send password reset email:', { email });
     router.replace('/');
   };
 
-  const handleLoginLink = () => {
+  const handleBackToLogin = () => {
     router.replace('/');
   };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ThemedView style={styles.container} lightColor="#FFFFFF" darkColor="#FFFFFF">
+
         {/* Title Section */}
         <TrainyTitle fontSize={24} fontWeight="800" />
 
         {/* Main Content */}
         <View style={styles.content}>
-          {/* Icon Section */}
-          <View style={styles.iconSection}>
-            <MaterialIcons name="person-add" size={67.5} color="#A1A1A1" />
-          </View>
-          {/* Subtitle Section */}
-          <View style={styles.subtitleSection}>
+          {/* Icon and Subtitle Section */}
+          <View style={styles.iconSubtitleSection}>
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="lock-reset" size={54} color="#A1A1A1" />
+            </View>
             <ThemedText style={styles.subtitle} lightColor="#A1A1A1" darkColor="#A1A1A1">
-              登録するユーザー情報を入力してください
+              登録済みのメールアドレスを入力してください
             </ThemedText>
           </View>
 
-          {/* Input Fields */}
+          {/* Input Field */}
           <View style={styles.inputSection}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="ユーザー名"
-                placeholderTextColor="rgba(161, 161, 161, 0.5)"
-                value={username}
-                onChangeText={setUsername}
-                autoCapitalize="none"
-              />
-            </View>
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
@@ -66,51 +53,25 @@ export default function RegisterScreen() {
                 autoCapitalize="none"
               />
             </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="パスワード"
-                placeholderTextColor="rgba(161, 161, 161, 0.5)"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                autoCapitalize="none"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="パスワード（確認）"
-                placeholderTextColor="rgba(161, 161, 161, 0.5)"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry
-                autoCapitalize="none"
-              />
-            </View>
           </View>
 
-          {/* Register Button */}
+          {/* Send Button */}
           <View style={styles.buttonSection}>
-            <TouchableOpacity style={styles.registerButton} onPress={handleRegister} activeOpacity={0.8}>
+            <TouchableOpacity style={styles.sendButton} onPress={handleSend} activeOpacity={0.8}>
               <View style={styles.buttonShadow} />
-              <ThemedText style={styles.registerButtonText} lightColor="#FFFFFF" darkColor="#FFFFFF">
-                登録
+              <ThemedText style={styles.sendButtonText} lightColor="#FFFFFF" darkColor="#FFFFFF">
+                送信
               </ThemedText>
             </TouchableOpacity>
           </View>
 
-          {/* Login Link Section */}
-          <View style={styles.loginLinkSection}>
-            <ThemedText style={styles.loginLinkText} lightColor="#A1A1A1" darkColor="#A1A1A1">
-              すでにアカウントをお持ちの方
-            </ThemedText>
-            <TouchableOpacity style={styles.loginLinkContainer} onPress={handleLoginLink}>
-              <View style={styles.loginLinkButton}>
-                <ThemedText style={styles.loginLinkButtonText} lightColor="#F89468" darkColor="#F89468">
-                  ログインはこちら
-                </ThemedText>
-              </View>
+          {/* Back to Login Link Section */}
+          <View style={styles.backLinkSection}>
+            <TouchableOpacity style={styles.backLinkContainer} onPress={handleBackToLogin}>
+              <MaterialIcons name="chevron-left" size={18} color="#A1A1A1" />
+              <ThemedText style={styles.backLinkText} lightColor="#A1A1A1" darkColor="#A1A1A1">
+                ログインに戻る
+              </ThemedText>
             </TouchableOpacity>
           </View>
         </View>
@@ -157,20 +118,19 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 40,
   },
-  iconSection: {
-    paddingTop: 40,
-    paddingBottom: 24,
+  iconSubtitleSection: {
+    paddingTop: 64,
+    paddingBottom: 56,
     alignItems: 'center',
   },
-  subtitleSection: {
-    paddingBottom: 48,
-    alignItems: 'center',
+  iconContainer: {
+    paddingBottom: 24,
   },
   subtitle: {
-    fontSize: 12,
-    fontWeight: '500',
-    lineHeight: 16,
-    letterSpacing: 1.2,
+    fontSize: 13,
+    fontWeight: '400',
+    lineHeight: 19.5,
+    letterSpacing: -0.325,
     color: '#A1A1A1',
     textAlign: 'center',
     fontFamily: Platform.OS === 'ios' ? 'Noto Sans JP' : 'sans-serif',
@@ -197,7 +157,7 @@ const styles = StyleSheet.create({
   buttonSection: {
     paddingTop: 40,
   },
-  registerButton: {
+  sendButton: {
     backgroundColor: '#F89468',
     borderRadius: 9999,
     paddingVertical: 16,
@@ -220,40 +180,31 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
     backgroundColor: 'transparent',
   },
-  registerButtonText: {
+  sendButtonText: {
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '600',
     lineHeight: 22.5,
-    letterSpacing: 1.5,
+    letterSpacing: 0.375,
     color: '#FFFFFF',
     textAlign: 'center',
     fontFamily: Platform.OS === 'ios' ? 'Noto Sans JP' : 'sans-serif',
   },
-  loginLinkSection: {
+  backLinkSection: {
     marginTop: 70,
     paddingBottom: 64,
     alignItems: 'center',
   },
-  loginLinkContainer: {
+  backLinkContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  loginLinkText: {
-    fontSize: 13,
+  backLinkText: {
+    fontSize: 14,
     fontWeight: '500',
-    lineHeight: 19.5,
+    lineHeight: 21,
     color: '#A1A1A1',
-    fontFamily: Platform.OS === 'ios' ? 'Noto Sans JP' : 'sans-serif',
-  },
-  loginLinkButton: {
-    marginLeft: 8,
-    marginTop: -1,
-  },
-  loginLinkButtonText: {
-    fontSize: 13,
-    fontWeight: '700',
-    lineHeight: 19.5,
-    color: '#F89468',
+    marginLeft: 4,
     fontFamily: Platform.OS === 'ios' ? 'Noto Sans JP' : 'sans-serif',
   },
   homeIndicator: {
