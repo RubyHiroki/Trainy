@@ -1,3 +1,4 @@
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
@@ -50,6 +51,10 @@ export default function RegisterScreen() {
 
         {/* Main Content */}
         <View style={styles.content}>
+          {/* Icon Section */}
+          <View style={styles.iconSection}>
+            <MaterialIcons name="person-add" size={67.5} color="#A1A1A1" />
+          </View>
           {/* Subtitle Section */}
           <View style={styles.subtitleSection}>
             <ThemedText style={styles.subtitle} lightColor="#A1A1A1" darkColor="#A1A1A1">
@@ -178,8 +183,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 40,
   },
-  subtitleSection: {
+  iconSection: {
     paddingTop: 40,
+    paddingBottom: 24,
+    alignItems: 'center',
+  },
+  subtitleSection: {
     paddingBottom: 48,
     alignItems: 'center',
   },
