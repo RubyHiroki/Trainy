@@ -13,6 +13,7 @@ export default function LoginScreen() {
 
   const handleLogin = () => {
     console.log('Login:', { username, password });
+    router.replace('/(tabs)');
   };
 
   return (
