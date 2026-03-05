@@ -1,19 +1,39 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { authenticateUser } from '@/lib/auth';
 
 export default function LoginScreen() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = () => {
-    console.log('Login:', { username, password });
-    router.replace('/(tabs)');
+  const handleLogin = async () => {
+    if (!email.trim() || !password.trim()) {
+      Alert.alert('エラー', 'メールアドレスとパスワードを入力してください');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const user = await authenticateUser(email, password);
+      
+      if (user) {
+        // ログイン成功
+        console.log('ログイン成功:', user);
+        router.replace('/(tabs)');
+      }
+    } catch (error: any) {
+      console.error('ログインエラー:', error);
+      Alert.alert('ログイン失敗', error.message || 'ログイン中にエラーが発生しました。もう一度お試しください。');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -33,11 +53,13 @@ export default function LoginScreen() {
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
-                placeholder="ユーザー名"
+                placeholder="メールアドレス"
                 placeholderTextColor="rgba(161, 161, 161, 0.5)"
-                value={username}
-                onChangeText={setUsername}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
                 autoCapitalize="none"
+                autoCorrect={false}
               />
             </View>
             <View style={styles.inputContainer}>
@@ -49,16 +71,21 @@ export default function LoginScreen() {
                 onChangeText={setPassword}
                 secureTextEntry
                 autoCapitalize="none"
+                autoCorrect={false}
               />
             </View>
           </View>
 
           {/* Login Button */}
           <View style={styles.buttonSection}>
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin} activeOpacity={0.8}>
+            <TouchableOpacity
+              style={[styles.loginButton, isLoading && styles.loginButtonDisabled]}
+              onPress={handleLogin}
+              activeOpacity={0.8}
+              disabled={isLoading}>
               <View style={styles.buttonShadow} />
               <ThemedText style={styles.loginButtonText} lightColor="#FFFFFF" darkColor="#FFFFFF">
-                ログイン
+                {isLoading ? 'ログイン中...' : 'ログイン'}
               </ThemedText>
             </TouchableOpacity>
           </View>
@@ -166,6 +193,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 10,
+  },
+  loginButtonDisabled: {
+    opacity: 0.6,
   },
   buttonShadow: {
     position: 'absolute',
