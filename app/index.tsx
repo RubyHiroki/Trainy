@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -11,29 +11,55 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleLogin = async () => {
+    setError(null);
     if (!email.trim() || !password.trim()) {
-      Alert.alert('エラー', 'メールアドレスとパスワードを入力してください');
+      setError('メールアドレスとパスワードを入力してください');
       return;
     }
 
     setIsLoading(true);
     try {
+      console.log('ログイン処理開始:', { email: email.trim() });
       const user = await authenticateUser(email, password);
       
-      if (user) {
-        // ログイン成功
-        console.log('ログイン成功:', user);
-        router.replace('/(tabs)');
+      if (!user) {
+        console.error('ユーザー情報が取得できませんでした');
+        setError('ログインに失敗しました');
+        return;
       }
+
+      console.log('ログイン成功、画面遷移開始:', user);
+      setError(null);
+      setTimeout(() => {
+        console.log('タイムライン画面に遷移');
+        router.replace('/(tabs)');
+      }, 100);
     } catch (error: any) {
-      console.error('ログインエラー:', error);
-      Alert.alert('ログイン失敗', error.message || 'ログイン中にエラーが発生しました。もう一度お試しください。');
+      console.error('ログインエラー詳細:', {
+        error,
+        code: error?.code,
+        message: error?.message,
+        stack: error?.stack,
+      });
+      const errorMessage = error.message || 'ログイン中にエラーが発生しました。もう一度お試しください。';
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    if (error) setError(null);
+  };
+
+  const handlePasswordChange = (text: string) => {
+    setPassword(text);
+    if (error) setError(null);
   };
 
   return (
@@ -52,11 +78,11 @@ export default function LoginScreen() {
           <View style={styles.inputSection}>
             <View style={styles.inputContainer}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, error && styles.inputError]}
                 placeholder="メールアドレス"
                 placeholderTextColor="rgba(161, 161, 161, 0.5)"
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={handleEmailChange}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -64,16 +90,24 @@ export default function LoginScreen() {
             </View>
             <View style={styles.inputContainer}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, error && styles.inputError]}
                 placeholder="パスワード"
                 placeholderTextColor="rgba(161, 161, 161, 0.5)"
                 value={password}
-                onChangeText={setPassword}
+                onChangeText={handlePasswordChange}
                 secureTextEntry
                 autoCapitalize="none"
                 autoCorrect={false}
               />
             </View>
+            {/* Error Message */}
+            {error && (
+              <View style={styles.errorContainer}>
+                <ThemedText style={styles.errorText} lightColor="#FF3B30" darkColor="#FF3B30">
+                  {error}
+                </ThemedText>
+              </View>
+            )}
           </View>
 
           {/* Login Button */}
@@ -174,6 +208,18 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Noto Sans JP' : 'sans-serif',
     textAlign: 'left',
     padding: 0,
+  },
+  inputError: {
+    color: '#FF3B30',
+  },
+  errorContainer: {
+    marginTop: 8,
+    paddingHorizontal: 4,
+  },
+  errorText: {
+    fontSize: 12,
+    color: '#FF3B30',
+    fontFamily: Platform.OS === 'ios' ? 'Noto Sans JP' : 'sans-serif',
   },
   buttonSection: {
     paddingTop: 40,
