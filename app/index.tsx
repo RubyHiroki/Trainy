@@ -165,13 +165,6 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 25,
   },
-  statusBarText: {
-    fontSize: 14,
-    fontWeight: '600',
-    lineHeight: 21,
-    color: '#2D2D2D',
-    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'sans-serif',
-  },
   content: {
     flex: 1,
     paddingHorizontal: 40,
@@ -275,12 +268,6 @@ const styles = StyleSheet.create({
     lineHeight: 16.5,
     color: '#A1A1A1',
     fontFamily: Platform.OS === 'ios' ? 'Noto Sans JP' : 'sans-serif',
-  },
-  linkDivider: {
-    width: 3,
-    height: 3,
-    borderRadius: 9999,
-    backgroundColor: '#E5E5E5',
   },
   homeIndicator: {
     position: 'absolute',
