@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword, User, UserCredential } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
 
@@ -110,6 +110,14 @@ export async function authenticateUser(
  */
 export function getCurrentUser() {
   return auth.currentUser;
+}
+
+/**
+ * @param callback
+ * @returns
+ */
+export function onAuthStateChange(callback: (user: User | null) => void) {
+  return onAuthStateChanged(auth, callback);
 }
 
 /**

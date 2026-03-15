@@ -1,18 +1,31 @@
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { authenticateUser } from '@/lib/auth';
+import { authenticateUser, onAuthStateChange } from '@/lib/auth';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChange((user) => {
+      setIsCheckingAuth(false);
+      if (user) {
+        console.log('既にログイン済み:', user.email);
+        router.replace('/(tabs)');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   const handleLogin = async () => {
     setError(null);
@@ -61,6 +74,18 @@ export default function LoginScreen() {
     setPassword(text);
     if (error) setError(null);
   };
+
+  if (isCheckingAuth) {
+    return (
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <ThemedView style={styles.container} lightColor="#FFFFFF" darkColor="#FFFFFF">
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#F89468" />
+          </View>
+        </ThemedView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -164,6 +189,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 12,
     elevation: 25,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     flex: 1,
