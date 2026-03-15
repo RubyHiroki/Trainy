@@ -88,9 +88,7 @@ export default function ProfileScreen() {
       <ThemedView style={styles.container} lightColor="#FFFFFF" darkColor="#FFFFFF">
         {/* Header */}
         <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <TrainyTitle fontSize={24} fontWeight="700" />
-          </View>
+          <TrainyTitle fontSize={20} fontWeight="700" />
         </View>
 
         <ScrollView
@@ -184,8 +182,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   header: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderBottomWidth: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F5F5F5',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -194,10 +192,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-  },
-  headerContent: {
-    paddingHorizontal: 24,
-    paddingVertical: 16,
   },
   scrollView: {
     flex: 1,
